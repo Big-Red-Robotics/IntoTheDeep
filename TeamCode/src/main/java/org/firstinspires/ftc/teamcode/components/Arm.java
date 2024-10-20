@@ -1,107 +1,196 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Arm {
-    public DcMotor leftLift, rightLift;
-    public Servo clawRotator;
-    public Servo claw;
-    List<DcMotor> lifts;
-
-    public enum ArmState {intake, outtake, hang, none};
-    public ArmState currentState = ArmState.none;
-    public boolean hang = false;
-    public boolean outtake = false;
+    public final DcMotorEx arm;
+    private final ServoImplEx wrist;
+    private final DcMotor armExtension;
+    public final TouchSensor slideZeroReset;
 
     public Arm(HardwareMap hardwareMap){
-        this.leftLift = hardwareMap.get(DcMotor.class, RobotConfig.liftL);
-        this.rightLift = hardwareMap.get(DcMotor.class, RobotConfig.liftR);
-        this.clawRotator = hardwareMap.get(Servo.class, RobotConfig.clawRotator);
-        this.claw = hardwareMap.get(Servo.class, RobotConfig.claw);
+        //TODO: adjust values
+        this.slideZeroReset = hardwareMap.get(TouchSensor.class,"touch");
+        this.arm = hardwareMap.get(DcMotorEx.class, RobotConfig.liftL);
+        this.wrist = hardwareMap.get(ServoImplEx.class, RobotConfig.clawPivot);
+        this.armExtension = hardwareMap.get(DcMotor.class, RobotConfig.armExtension);
 
-        lifts = Arrays.asList(leftLift, rightLift);
-        for(DcMotor lift: lifts){
-            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
+        arm.setDirection(DcMotor.Direction.REVERSE);
 
-        rightLift.setDirection(DcMotor.Direction.REVERSE);
-        leftLift.setDirection(DcMotor.Direction.FORWARD);
+        armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armExtension.setTargetPosition(0);
+        armExtension.setPower(0.0);
+
+        wrist.setPwmRange(new PwmControl.PwmRange(1200, 1800));
+        wrist.setPosition(0); //somehow this doesn't work
     }
 
-    public void setState (ArmState state){
-        currentState = state;
+    public void resetArm(){
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setTargetPosition(arm.getTargetPosition());
+    }
+
+    public void resetArmExtension(){
+        armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armExtension.setTargetPosition(armExtension.getTargetPosition());
+    }
+
+    public void setArmExtensionPower(double power){
+        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armExtension.setPower(power);
+        armExtension.setTargetPosition(armExtension.getCurrentPosition());
+    }
+
+    public void setLiftPosition(int armPosition){
+        arm.setTargetPosition(armPosition);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    //armEx
+    public void setArmExtensionPosition(int position){
+        armExtension.setTargetPosition(position);
+    }
+
+
+    //claw rotator
+    public void moveClawRotator(int pos){
+        wrist.setPosition(pos);
     }
 
     public void setLiftPower(double power) {
-        outtake = false;
-        setState(ArmState.none);
-
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        rightLift.setDirection(DcMotor.Direction.REVERSE);
-        leftLift.setDirection(DcMotor.Direction.FORWARD);
-
-        leftLift.setPower(power);
-        rightLift.setPower(power);
-
-        leftLift.setTargetPosition(leftLift.getCurrentPosition());
-        rightLift.setTargetPosition(rightLift.getCurrentPosition());
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setPower(power);
+        arm.setTargetPosition(arm.getCurrentPosition());
     }
 
-    public void openClaw(){
-        claw.setPosition(0.6);
+    public void toPosition(int position, int rotator, boolean pivot, Telemetry t){
+        //TODO
+        //claw pivot
+//        if (pivot) wrist.setPosition(CP_DEFAULT);
+//        else wrist.setPosition(CP_FLIP);
+//
+////        clawPivot.setPosition(clawPivotPosition);
+//
+//        //set lift target
+//        setLiftPosition(position);
+//        arm.setPower(0.1);
+//        rightLift.setPower(0.1);
+//
+//        //if retrack back. Default retract at -0.6 unless
+//        if (armExtension.getTargetPosition() == 0){
+//            armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            //the touch sensor is flipped
+//            while(slideZeroReset.isPressed()) {
+//                if (Math.abs(armExtension.getCurrentPosition()) < 50) armExtension.setPower(-0.1);
+//                else armExtension.setPower(-0.6);
+//            }
+//            armExtension.setPower(0.0);
+//        }
+//        while (armExtension.isBusy()) {
+//            // when it has a target.
+//            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            armExtension.setPower(0.6);
+//        }
+//        armExtension.setPower(0.0);
+//
+//        //set lift power
+//        while (arm.isBusy() || rightLift.isBusy()) {
+//            t.addData("target position", getLiftTargetPosition());
+//            t.addData("current position", getLiftPosition());
+//            t.update();
+//            for(DcMotor lift: lifts){
+//                if (lift.getCurrentPosition() > lift.getTargetPosition()) {
+//                    if(hang) lift.setPower(1.0);
+//                    else if (lift.getCurrentPosition() < 700 || lift.getCurrentPosition() > 1300) {
+//                        //can depend on gravity
+//                        if (lift.getCurrentPosition() < MIDDLE) lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                        else lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        lift.setPower(0.0);
+//                    }
+//                    else lift.setPower(0.3);
+//                } else if(lift.getCurrentPosition() > LOW && lift.getTargetPosition() == MIDDLE) lift.setPower(0.3);
+//                else lift.setPower(0.8);
+//            }
+//
+//            if(getLiftTargetPosition() == 0 && getLiftPosition() < 15) break;
+//        }
+//        arm.setPower(0.5);
+//        rightLift.setPower(0.5);
+//
+//        //claw rotator
+//        moveClawRotator(rotator);
     }
 
-    public void closeClaw(){
-        claw.setPosition(0.32);
+    public void update(boolean rotateClaw) {
+        //TODO
+        //this touch sensor is flipped
+//        if(!slideZeroReset.isPressed()) armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        //claw rotator
+//        if(rotateClaw) moveClawRotator(rotatorLevel);
+//
+//        wrist.setPosition(clawPivotPosition);
+//
+//        if (armExtension.getTargetPosition() == 0){
+//            armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            //the touch sensor is flipped
+//            if(slideZeroReset.isPressed()) {
+//                if (Math.abs(armExtension.getCurrentPosition()) < 50) armExtension.setPower(-0.1);
+//                else armExtension.setPower(-0.6);
+//            }
+//            else armExtension.setPower(0.0);
+//        } else if(armExtension.isBusy()) {
+//            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            if(armExtension.getTargetPosition() == 100) armExtension.setPower(1.0);
+//            else if(getLiftTargetPosition() == LOW || getLiftTargetPosition() == MIDDLE || getLiftTargetPosition() == VERY_LOW || getLiftTargetPosition() == AUTON)
+//                armExtension.setPower(0.6);
+//            else armExtension.setPower(1.0);
+//        } else armExtension.setPower(0.0);
+//
+//        //the actual lift part
+//        for (DcMotor lift : lifts) {
+//            if (lift.isBusy()) {
+//                if(hang) lift.setPower(1.0);
+//                else if(lift.getTargetPosition() == HIGH && lift.getCurrentPosition() > HANG + 20){
+//                    //can depend on gravity
+//                    lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                    lift.setPower(0.0);
+//                } else if (lift.getCurrentPosition() > lift.getTargetPosition()) {
+//                    if (lift.getCurrentPosition() < 700) {
+//                        //can depend on gravity
+//                        if ((lift.getCurrentPosition() < MIDDLE && lift.getTargetPosition() == 0) || (lift.getCurrentPosition() < MIDDLE + 100)) lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                        else lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                        lift.setPower(0.0);
+//                    } else lift.setPower(0.7);
+//                } else if(lift.getCurrentPosition() > LOW && lift.getTargetPosition() == MIDDLE) lift.setPower(0.3);
+//                else lift.setPower(0.8);
+//            } else if (lift.getTargetPosition() == HIGH || lift.getTargetPosition() == GROUND) {
+//                lift.setPower(0.0);
+//            }
+//        }
     }
 
-    public void update() {
-        for (DcMotor lift : lifts) {
-            //claw stopper
-            if(lift.getTargetPosition() == 0 && lift.getCurrentPosition() < 100) clawRotator.setPosition(0.0);
-            else clawRotator.setPosition(0.5);
+    public int getArmPosition() {return arm.getCurrentPosition();}
+    public int getArmTargetPosition() {return arm.getTargetPosition();}
 
-            //the actual lift part
-            if (currentState == ArmState.none) {
-                lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                if (outtake && lift.getCurrentPosition() < 1360 && lift.getCurrentPosition() > 300) {
-                    setState(ArmState.outtake);
-                }
-            } else {
-                if (currentState == ArmState.intake) {lift.setTargetPosition(0); outtake = false;}
-                else if (currentState == ArmState.outtake) {lift.setTargetPosition(1380); hang = false; outtake = true;}
-                else {lift.setTargetPosition(1100); hang = true; outtake = false;}
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public double getWristPosition() {return wrist.getPosition();}
 
-                if (lift.isBusy()) {
-                    if (lift.getCurrentPosition() > lift.getTargetPosition()) {
-                        if (lift.getCurrentPosition() < 800 && !hang) {
-                            //can depend on gravity
-                            if (lift.getCurrentPosition() < 250) lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                            else lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                            lift.setPower(0.0);
-                        } else lift.setPower(0.4);
-                    } else lift.setPower(0.8);
-                } else if (!hang) {
-                    setState(ArmState.none);
-                    lift.setPower(0.0);
-                }
-            }
-        }
-    }
-
-    public int getLiftPosition() {return (leftLift.getCurrentPosition() + rightLift.getCurrentPosition())/2;}
-    public int getTargetPosition() {return (leftLift.getTargetPosition() + rightLift.getTargetPosition())/2;}
-    public double getPower() {return (leftLift.getPower() + rightLift.getPower())/2;}
+    public double getArmExPower() {return armExtension.getPower();}
+    public int getArmExPosition() {return armExtension.getCurrentPosition();}
+    public int getArmExTargetPosition() {return armExtension.getTargetPosition();}
 }
