@@ -11,9 +11,9 @@ public class RobotConfig {
     public static InitialSide initialSide = InitialSide.LEFT;
 
     public static String motorFL = "dFL", motorFR = "dFR", motorBL = "dBL", motorBR = "dBR";
-    public static String liftR = "liftR", liftL = "liftL";
-    public static String clawRotator = "wrist";
-    public static String claw = "claw";
+    public static String arm = "arm";
+    public static String wrist = "wrist", intake = "intake";
+    public static String armExtension = "armEx";
     public static String launchDrone = "droneLauncher";
     public static String positionDrone = "dronePositioner";
 
