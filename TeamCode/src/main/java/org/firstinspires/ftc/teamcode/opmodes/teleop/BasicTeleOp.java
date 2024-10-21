@@ -43,9 +43,11 @@ public class BasicTeleOp extends LinearOpMode {
             else arm.stopIntake();
 
             //claw rotator (wrist 1)
-            if(gamepad2.left_trigger > 0.2){
-            } else if (gamepad2.right_trigger > 0.2) {
-            }
+            if(gamepad2.left_trigger > 0.2)
+                arm.swingWristLeft();
+            else if (gamepad2.right_trigger > 0.2)
+                arm.swingWristRight();
+            else arm.stopWrist();
 
             //lift
             if (gamepad2.a) {
@@ -77,7 +79,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("arm position", arm.getArmPosition());
             telemetry.addData("arm target", arm.getArmTargetPosition());
             telemetry.addLine();
-            telemetry.addData("wrist",arm.getWristPosition());
+//            telemetry.addData("wrist",arm.getWristPosition());
             telemetry.addLine();
             telemetry.addData("ArmEx power", arm.getArmExPower());
             telemetry.addData("ArmEx position", arm.getArmExPosition());

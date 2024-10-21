@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
 public class Arm {
     public final DcMotorEx arm;
-    private final ServoImplEx wrist;
+    private final CRServo wrist;
     private final CRServo intake;
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
@@ -26,7 +26,7 @@ public class Arm {
         //TODO: adjust values
 //        this.slideZeroReset = hardwareMap.get(TouchSensor.class,"touch");
         this.arm = hardwareMap.get(DcMotorEx.class, RobotConfig.arm);
-        this.wrist = hardwareMap.get(ServoImplEx.class, RobotConfig.wrist);
+        this.wrist = hardwareMap.get(CRServo.class, RobotConfig.wrist);
         this.armExtension = hardwareMap.get(DcMotor.class, RobotConfig.armExtension);
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
 
@@ -41,9 +41,25 @@ public class Arm {
 
         resetArm();
         resetArmExtension();
-
-        wrist.setPosition(0);
     }
+
+    //wrist
+    public void swingWristRight(){
+        wrist.setPower(0.5);
+    }
+
+    public void swingWristLeft(){
+        wrist.setPower(-0.5);
+    }
+
+    public void stopWrist(){
+        wrist.setPower(0);
+    }
+
+    //wrist as Servo (not CRServo)
+//    public void setWristPosition(int pos){
+//        wrist.setPosition(pos);
+//    }
 
     //intake
     public void intake(){
@@ -81,10 +97,6 @@ public class Arm {
     //armEx
     public void setArmExtensionPosition(int position){
         armExtension.setTargetPosition(position);
-    }
-
-    public void setWristPosition(int pos){
-        wrist.setPosition(pos);
     }
 
     //general
@@ -131,7 +143,7 @@ public class Arm {
     public int getArmPosition() {return arm.getCurrentPosition();}
     public int getArmTargetPosition() {return arm.getTargetPosition();}
 
-    public double getWristPosition() {return wrist.getPosition();}
+//    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
 
     public double getArmExPower() {return armExtension.getPower();}
     public int getArmExPosition() {return armExtension.getCurrentPosition();}
