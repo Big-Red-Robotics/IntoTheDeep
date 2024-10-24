@@ -56,7 +56,7 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.setArmExtensionPosition(0);
             } else if (gamepad2.x) {
                 //low basket
-                arm.setArmPosition(Arm.HIGH);
+                arm.setArmPosition(Arm.LOW);
                 arm.setArmExtensionPosition(0);
             }else if (gamepad2.y) {
                 //high basket

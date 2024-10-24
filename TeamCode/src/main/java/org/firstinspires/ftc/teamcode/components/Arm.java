@@ -17,7 +17,8 @@ public class Arm {
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
 
-    public static final int HIGH = 600;
+    public static final int LOW = 600;
+    public static final int HIGH = 1600;
     public static final int GROUND = 0;
 
     public static final int EXTEND = 1800;
@@ -123,18 +124,20 @@ public class Arm {
 //            }
 //            else armExtension.setPower(0.0);
             armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.isBusy()) armExtension.setPower(0.5);
+            if(armExtension.isBusy()) armExtension.setPower(1);
             else armExtension.setPower(0.0);
         } else if(armExtension.isBusy()) {
             armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
+            else armExtension.setPower(1);
         } else armExtension.setPower(0.0);
 
         //arm (lift)
         if (arm.isBusy()) {
-            if(arm.getTargetPosition() == HIGH) arm.setPower(1.0);
+            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
             else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
-                arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 arm.setPower(0.0);
             }
         } else arm.setPower(0.0);
