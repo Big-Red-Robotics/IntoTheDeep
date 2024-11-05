@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages;
+package org.firstinspires.ftc.teamcode.components.drive.messages;
 
 public final class MecanumCommandMessage {
     public long timestamp;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages;
+package org.firstinspires.ftc.teamcode.components.drive.messages;
 
 import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.Time;
