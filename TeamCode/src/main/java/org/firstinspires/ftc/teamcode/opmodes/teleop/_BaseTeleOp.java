@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.MecanumDrive;
+import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
 
 @Disabled
 @TeleOp(name="Base TeleOp")

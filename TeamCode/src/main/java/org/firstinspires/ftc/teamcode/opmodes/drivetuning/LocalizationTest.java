@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning.tuning;
+package org.firstinspires.ftc.teamcode.opmodes.drivetuning;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -8,9 +8,9 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.Drawing;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.MecanumDrive;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.TankDrive;
+import org.firstinspires.ftc.teamcode.components.drive.Drawing;
+import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.components.drive.TankDrive;
 
 public class LocalizationTest extends LinearOpMode {
     @Override

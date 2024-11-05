@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning;
+package org.firstinspires.ftc.teamcode.components.drive;
 
 import androidx.annotation.NonNull;
 
@@ -40,10 +40,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.DriveCommandMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.MecanumCommandMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.MecanumLocalizerInputsMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.MecanumCommandMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.MecanumLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.PoseMessage;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
 import java.lang.Math;
@@ -228,7 +228,8 @@ public class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
-        //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
