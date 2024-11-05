@@ -102,19 +102,6 @@ public class Arm {
 
     //general
     public void toPosition(int position, int rotator, boolean pivot, Telemetry t){
-        //TODO
-    }
-
-    public void update() {
-        //TODO
-        //this touch sensor is flipped
-//        if(!slideZeroReset.isPressed()) armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //claw rotator
-//        if(rotateClaw) moveClawRotator(rotatorLevel);
-//
-//        wrist.setPosition(clawPivotPosition);
-
         if (armExtension.getTargetPosition() == 0){
 //            armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            //the touch sensor is flipped
@@ -123,6 +110,29 @@ public class Arm {
 //                else armExtension.setPower(-0.6);
 //            }
 //            else armExtension.setPower(0.0);
+            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(armExtension.isBusy()) armExtension.setPower(1);
+            else armExtension.setPower(0.0);
+        } else if(armExtension.isBusy()) {
+            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
+            else armExtension.setPower(1);
+        } else armExtension.setPower(0.0);
+
+        //arm (lift)
+        if (arm.isBusy()) {
+            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
+            else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
+                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                arm.setPower(0.0);
+            }
+        } else arm.setPower(0.0);
+    }
+
+    public void update() {
+        //armExtension
+        if (armExtension.getTargetPosition() == 0){
             armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if(armExtension.isBusy()) armExtension.setPower(1);
             else armExtension.setPower(0.0);
