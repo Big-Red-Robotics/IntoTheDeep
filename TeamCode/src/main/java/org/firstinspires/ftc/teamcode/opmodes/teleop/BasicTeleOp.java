@@ -5,12 +5,14 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.components.Arm;
 import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
 
 @TeleOp(name="2024-2025 INTOTHEDEEP")
 public class BasicTeleOp extends LinearOpMode {
+
     @Override
     public void runOpMode() {
         //initialize components
@@ -68,6 +70,17 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.setArmExtensionPosition(700);
             }
 
+            if(gamepad1.y) {
+                arm.setArmPosition(5000);
+                arm.hang = true;
+            } else if(gamepad1.x){
+                arm.setArmPosition(5500);
+                arm.hang = true;
+            } else if(gamepad1.b && arm.hang){
+                arm.setArmPosition(-500);
+            }
+
+            if (gamepad2.dpad_down) arm.setArmPosition(200);
             if (gamepad2.dpad_down) arm.setArmPosition(Arm.VERY_LOW);
             else if (gamepad2.dpad_left) arm.setArmExtensionPosition(500);
             else if (gamepad2.dpad_up) arm.setArmPosition(Arm.GROUND);
