@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.components.Arm;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.MecanumDrive;
+import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
 
 @TeleOp(name="2024-2025 INTOTHEDEEP")
 public class BasicTeleOp extends LinearOpMode {

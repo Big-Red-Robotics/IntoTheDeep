@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning.tuning;
+package org.firstinspires.ftc.teamcode.opmodes.drivetuning;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.MecanumDrive;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.TankDrive;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.ThreeDeadWheelLocalizer;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.TwoDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.components.drive.TankDrive;
+import org.firstinspires.ftc.teamcode.components.drive.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.components.drive.TwoDeadWheelLocalizer;
 
 public final class ManualFeedbackTuner extends LinearOpMode {
     public static double DISTANCE = 64;

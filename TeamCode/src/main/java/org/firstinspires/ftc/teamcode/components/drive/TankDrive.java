@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.drivetuning;
+package org.firstinspires.ftc.teamcode.components.drive;
 
 import androidx.annotation.NonNull;
 
@@ -46,10 +46,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.DriveCommandMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.PoseMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.TankCommandMessage;
-import org.firstinspires.ftc.teamcode.opmodes.drivetuning.messages.TankLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.TankCommandMessage;
+import org.firstinspires.ftc.teamcode.components.drive.messages.TankLocalizerInputsMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
