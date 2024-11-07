@@ -18,10 +18,12 @@ public class Arm {
 //    public final TouchSensor slideZeroReset;
 
     public static final int LOW = 600;
-    public static final int HIGH = 1600;
+    public static final int HIGH = 1925;
     public static final int GROUND = 0;
 
     public static final int EXTEND = 1800;
+
+    public boolean hang = false;
 
     public Arm(HardwareMap hardwareMap){
         //TODO: adjust values
@@ -106,23 +108,7 @@ public class Arm {
     }
 
     public void update() {
-        //TODO
-        //this touch sensor is flipped
-//        if(!slideZeroReset.isPressed()) armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //claw rotator
-//        if(rotateClaw) moveClawRotator(rotatorLevel);
-//
-//        wrist.setPosition(clawPivotPosition);
-
         if (armExtension.getTargetPosition() == 0){
-//            armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            //the touch sensor is flipped
-//            if(slideZeroReset.isPressed()) {
-//                if (Math.abs(armExtension.getCurrentPosition()) < 50) armExtension.setPower(-0.1);
-//                else armExtension.setPower(-0.6);
-//            }
-//            else armExtension.setPower(0.0);
             armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if(armExtension.isBusy()) armExtension.setPower(1);
             else armExtension.setPower(0.0);
@@ -133,12 +119,19 @@ public class Arm {
         } else armExtension.setPower(0.0);
 
         //arm (lift)
+
         if (arm.isBusy()) {
-            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
+            if(hang)
+                arm.setPower(1);
+            else if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
+            //if you want to lower and not in hang mode.
             else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 arm.setPower(0.0);
+            }else{
+                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
         } else arm.setPower(0.0);
     }
