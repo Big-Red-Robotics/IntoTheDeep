@@ -17,6 +17,7 @@ public class Arm {
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
 
+    public static final int VERY_LOW = 200;
     public static final int LOW = 600;
     public static final int HIGH = 1600;
     public static final int GROUND = 0;
@@ -32,7 +33,7 @@ public class Arm {
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
 
         armExtension.setDirection(DcMotor.Direction.FORWARD);
-        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+//        arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtension.setTargetPosition(0);
@@ -143,18 +144,13 @@ public class Arm {
         } else armExtension.setPower(0.0);
 
         //arm (lift)
-        if (arm.isBusy()) {
-            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
-            else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
-                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                arm.setPower(0.0);
-            }
-        } else arm.setPower(0.0);
+        if (arm.isBusy()) arm.setPower(1.0);
+        else arm.setPower(0.0);
     }
 
     public int getArmPosition() {return arm.getCurrentPosition();}
     public int getArmTargetPosition() {return arm.getTargetPosition();}
+    public int getArmPower() {return (int) arm.getPower();}
 
 //    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
 
