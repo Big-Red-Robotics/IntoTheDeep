@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -41,11 +45,21 @@ public class BasicRightAutonomous extends LinearOpMode {
         //TODO: set the write coordinates for initial point
         //also could do this when instantiating MecanumDrive, but...
         boolean isRed = RobotConfig.teamColor == TeamColor.RED;
-        if (isRed) drive.pose = new Pose2d(0, 0, Math.toRadians(90));
-        else drive.pose = new Pose2d(0, 0, Math.toRadians(-90));
+        Pose2d initialPose;
+        if (isRed) initialPose = new Pose2d(60, -24, Math.toRadians(-90));
+        else initialPose = new Pose2d(-60, 24, Math.toRadians(90));
+
+        drive.pose = initialPose;
+
+        Action tab1 = drive.actionBuilder(initialPose)
+                .lineToX(isRed ? 55 : -55)
+                .lineToY(isRed ? 60 : -60)
+                .build();
 
         while(opModeIsActive()) {
             //autonomous code
+            Actions.runBlocking(tab1);
+
 
         }
     }
