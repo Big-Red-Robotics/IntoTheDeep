@@ -17,6 +17,7 @@ public class Arm {
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
 
+    public static final int VERY_LOW = 200;
     public static final int LOW = 600;
     public static final int HIGH = 1925;
     public static final int GROUND = 0;
@@ -34,7 +35,7 @@ public class Arm {
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
 
         armExtension.setDirection(DcMotor.Direction.FORWARD);
-        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+//        arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtension.setTargetPosition(0);
@@ -104,10 +105,12 @@ public class Arm {
 
     //general
     public void toPosition(int position, int rotator, boolean pivot, Telemetry t){
+
         //TODO
     }
 
     public void update() {
+        //armExtension
         if (armExtension.getTargetPosition() == 0){
             armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if(armExtension.isBusy()) armExtension.setPower(1);
@@ -119,25 +122,13 @@ public class Arm {
         } else armExtension.setPower(0.0);
 
         //arm (lift)
-
-        if (arm.isBusy()) {
-            if(hang)
-                arm.setPower(1);
-            else if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
-            //if you want to lower and not in hang mode.
-            else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                arm.setPower(0.0);
-            }else{
-                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-        } else arm.setPower(0.0);
+        if (arm.isBusy()) arm.setPower(1.0);
+        else arm.setPower(0.0);
     }
 
     public int getArmPosition() {return arm.getCurrentPosition();}
     public int getArmTargetPosition() {return arm.getTargetPosition();}
+    public int getArmPower() {return (int) arm.getPower();}
 
 //    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
 
