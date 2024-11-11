@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.components;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
@@ -88,7 +86,8 @@ public class Arm {
 
     public void resetArmExtension(){
         armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtension.setTargetPosition(armExtension.getTargetPosition());
     }
@@ -101,6 +100,7 @@ public class Arm {
     //armEx
     public void setArmExtensionPosition(int position){
         armExtension.setTargetPosition(position);
+        armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     //general
@@ -111,15 +111,17 @@ public class Arm {
 
     public void update() {
         //armExtension
-        if (armExtension.getTargetPosition() == 0){
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.isBusy()) armExtension.setPower(1);
-            else armExtension.setPower(0.0);
-        } else if(armExtension.isBusy()) {
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
-            else armExtension.setPower(1);
-        } else armExtension.setPower(0.0);
+//        if (armExtension.getTargetPosition() == 0){
+//            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            if(armExtension.isBusy()) armExtension.setPower(1);
+//            else armExtension.setPower(0.0);
+//        } else if(armExtension.isBusy()) {
+//            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
+//            else armExtension.setPower(1);
+//        } else armExtension.setPower(0.0);
+        if (armExtension.isBusy()) armExtension.setPower(0.7);
+        else armExtension.setPower(0.0);
 
         //arm (lift)
         if (arm.isBusy()) arm.setPower(1.0);
@@ -135,4 +137,6 @@ public class Arm {
     public double getArmExPower() {return armExtension.getPower();}
     public int getArmExPosition() {return armExtension.getCurrentPosition();}
     public int getArmExTargetPosition() {return armExtension.getTargetPosition();}
+    public DcMotor.RunMode getRunMode() {return armExtension.getMode();}
+
 }

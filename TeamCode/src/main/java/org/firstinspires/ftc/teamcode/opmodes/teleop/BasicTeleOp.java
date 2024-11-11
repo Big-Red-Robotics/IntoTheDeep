@@ -98,6 +98,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("ArmEx power", arm.getArmExPower());
             telemetry.addData("ArmEx position", arm.getArmExPosition());
             telemetry.addData("ArmEx target position", arm.getArmExTargetPosition());
+            telemetry.addData("ArmEx runmode", arm.getRunMode());
             telemetry.addLine();
 //            telemetry.addData("limit switch", arm.slideZeroReset.getValue());
 
