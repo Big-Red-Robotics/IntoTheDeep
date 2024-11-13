@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -52,15 +53,11 @@ public class BasicRightAutonomous extends LinearOpMode {
         drive.pose = initialPose;
 
         Action tab1 = drive.actionBuilder(initialPose)
-                .lineToX(isRed ? 55 : -55)
-                .lineToY(isRed ? 60 : -60)
+                .strafeToConstantHeading(isRed ? new Vector2d(55, 60) : new Vector2d(-55, -60))
                 .build();
 
-        while(opModeIsActive()) {
-            //autonomous code
-            Actions.runBlocking(tab1);
+        waitForStart();
 
-
-        }
+        Actions.runBlocking(tab1);
     }
 }
