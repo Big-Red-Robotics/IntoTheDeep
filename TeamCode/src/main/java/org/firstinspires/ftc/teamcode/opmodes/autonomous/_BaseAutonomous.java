@@ -24,8 +24,8 @@ public class _BaseAutonomous extends LinearOpMode {
             sleep(20);
         }
 
-        while(opModeIsActive()) {
-            //autonomous code
-        }
+        waitForStart();
+
+        //autonomous code
     }
 }

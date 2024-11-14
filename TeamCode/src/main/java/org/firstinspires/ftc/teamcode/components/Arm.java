@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.components;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
 public class Arm {
@@ -24,7 +25,6 @@ public class Arm {
     public static final int EXTEND = 1800;
 
     public Arm(HardwareMap hardwareMap){
-        //TODO: adjust values
 //        this.slideZeroReset = hardwareMap.get(TouchSensor.class,"touch");
         this.arm = hardwareMap.get(DcMotorEx.class, RobotConfig.arm);
         this.wrist = hardwareMap.get(CRServo.class, RobotConfig.wrist);
@@ -100,36 +100,6 @@ public class Arm {
         armExtension.setTargetPosition(position);
     }
 
-    //general
-    public void toPosition(int position, int rotator, boolean pivot, Telemetry t){
-        if (armExtension.getTargetPosition() == 0){
-//            armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            //the touch sensor is flipped
-//            if(slideZeroReset.isPressed()) {
-//                if (Math.abs(armExtension.getCurrentPosition()) < 50) armExtension.setPower(-0.1);
-//                else armExtension.setPower(-0.6);
-//            }
-//            else armExtension.setPower(0.0);
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.isBusy()) armExtension.setPower(1);
-            else armExtension.setPower(0.0);
-        } else if(armExtension.isBusy()) {
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
-            else armExtension.setPower(1);
-        } else armExtension.setPower(0.0);
-
-        //arm (lift)
-        if (arm.isBusy()) {
-            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
-            else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
-                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                arm.setPower(0.0);
-            }
-        } else arm.setPower(0.0);
-    }
-
     public void update() {
         //armExtension
         if (armExtension.getTargetPosition() == 0){
@@ -153,12 +123,69 @@ public class Arm {
         } else arm.setPower(0.0);
     }
 
+    public Action toPosition(int pos) {
+        return new LiftToPosition(pos);
+    }
+
+    public Action outtakeAction() {
+        return new PowerIntake(-1.0);
+    }
+    public Action intakeAction() {
+        return new PowerIntake(1.0);
+    }
+    public Action stopIntakeAction() {
+        return new PowerIntake(0.0);
+    }
+
     public int getArmPosition() {return arm.getCurrentPosition();}
     public int getArmTargetPosition() {return arm.getTargetPosition();}
-
 //    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
-
     public double getArmExPower() {return armExtension.getPower();}
     public int getArmExPosition() {return armExtension.getCurrentPosition();}
     public int getArmExTargetPosition() {return armExtension.getTargetPosition();}
+
+    public class PowerIntake implements Action {
+        private final double power;
+
+        public PowerIntake(double power){
+            this.power = power;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intake.setPower(power);
+            return false;
+        }
+    }
+
+    public class LiftToPosition implements Action {
+        private boolean initialized = false;
+        private final int targetPosition;
+
+        public LiftToPosition(int pos){
+            this.targetPosition = pos;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            // powers on motor, if it is not on
+            if (!initialized) {
+                setArmPosition(targetPosition);
+                arm.setPower(1.0);
+                initialized = true;
+            }
+
+            // checks lift's current position
+            packet.put("current Arm position", getArmPosition());
+            packet.put("target Arm position", getArmTargetPosition());
+            if (arm.isBusy()) {
+                // true causes the action to rerun
+                return true;
+            } else {
+                // false stops action rerun
+                arm.setPower(0);
+                return false;
+            }
+        }
+    }
 }
