@@ -34,7 +34,7 @@ public class Arm {
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
 
         armExtension.setDirection(DcMotor.Direction.FORWARD);
-        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+//        arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtension.setTargetPosition(0);
