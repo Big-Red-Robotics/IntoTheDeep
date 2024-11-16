@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
@@ -20,9 +19,12 @@ public class Arm {
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
 
-    public static final int LOW = 600;
-    public static final int HIGH = 1600;
+    public static final int VERY_LOW = 1600;
+    public static final int LOW = 3000;
+    public static final int HIGH = 4000;
     public static final int GROUND = 0;
+
+    public boolean hang = false;
 
     public static final int EXTEND = 1800;
 
@@ -87,7 +89,8 @@ public class Arm {
 
     public void resetArmExtension(){
         armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtension.setTargetPosition(armExtension.getTargetPosition());
     }
@@ -133,6 +136,8 @@ public class Arm {
 
     public int getArmPosition() {return arm.getCurrentPosition();}
     public int getArmTargetPosition() {return arm.getTargetPosition();}
+    public int getArmPower() {return (int) arm.getPower();}
+
 //    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
     public double getArmExPower() {return armExtension.getPower();}
     public int getArmExPosition() {return armExtension.getCurrentPosition();}
