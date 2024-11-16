@@ -71,12 +71,15 @@ public class BasicTeleOp extends LinearOpMode {
             }
 
             if(gamepad1.y) {
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(5000);
                 arm.hang = true;
             } else if(gamepad1.x){
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(5500);
                 arm.hang = true;
             } else if(gamepad1.b && arm.hang){
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(-500);
             }
 
@@ -98,7 +101,7 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("ArmEx power", arm.getArmExPower());
             telemetry.addData("ArmEx position", arm.getArmExPosition());
             telemetry.addData("ArmEx target position", arm.getArmExTargetPosition());
-            telemetry.addData("ArmEx runmode", arm.getRunMode());
+//            telemetry.addData("ArmEx runmode", arm.getRunMode());
             telemetry.addLine();
 //            telemetry.addData("limit switch", arm.slideZeroReset.getValue());
 
