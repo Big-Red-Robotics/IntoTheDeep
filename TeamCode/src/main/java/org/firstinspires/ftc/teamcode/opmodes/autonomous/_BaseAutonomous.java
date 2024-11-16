@@ -13,7 +13,7 @@ public class _BaseAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
         //initialize components
-//        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
         telemetry.addLine("waiting to start!");
         telemetry.update();

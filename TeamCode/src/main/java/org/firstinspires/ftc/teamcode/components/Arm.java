@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.components;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -98,32 +100,24 @@ public class Arm {
     //armEx
     public void setArmExtensionPosition(int position){
         armExtension.setTargetPosition(position);
+        armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void update() {
         //armExtension
-        if (armExtension.getTargetPosition() == 0){
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.isBusy()) armExtension.setPower(1);
-            else armExtension.setPower(0.0);
-        } else if(armExtension.isBusy()) {
-            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
-            else armExtension.setPower(1);
-        } else armExtension.setPower(0.0);
+        if (armExtension.isBusy()) armExtension.setPower(0.7);
+        else armExtension.setPower(0.0);
 
         //arm (lift)
-        if (arm.isBusy()) {
-            if(arm.getTargetPosition() != GROUND) arm.setPower(0.8);
-            else if (arm.getCurrentPosition() > arm.getTargetPosition()) {
-                if (arm.getCurrentPosition() > 800) arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                else arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                arm.setPower(0.0);
-            }
-        } else arm.setPower(0.0);
+        if (arm.isBusy()) arm.setPower(1.0);
+        else arm.setPower(0.0);
     }
 
-    public Action toPosition(int pos) {
+    public Action armExToPosition(int pos) {
+        return new ArmExToPosition(pos);
+    }
+
+    public Action liftToPosition(int pos) {
         return new LiftToPosition(pos);
     }
 
@@ -155,6 +149,40 @@ public class Arm {
         public boolean run(@NonNull TelemetryPacket packet) {
             intake.setPower(power);
             return false;
+        }
+    }
+
+    public class ArmExToPosition implements Action {
+        private boolean initialized = false;
+        private final int targetPosition;
+
+        public ArmExToPosition(int pos){
+            this.targetPosition = pos;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            // powers on motor, if it is not on
+            if (!initialized) {
+                setArmExtensionPosition(targetPosition);
+                Log.d("SET ARMEX POS", String.valueOf(getArmExTargetPosition()));
+                armExtension.setPower(1.0);
+                initialized = true;
+            }
+
+            // checks lift's current position
+            packet.put("current ArmEx position", getArmExPosition());
+            packet.put("target ArmEx position", getArmExTargetPosition());
+            if (armExtension.isBusy()) {
+                // true causes the action to rerun
+                Log.d("target ArmEx position", String.valueOf(getArmExTargetPosition()));
+                Log.d("current ArmEx position", String.valueOf(getArmExPosition()));
+                return true;
+            } else {
+                // false stops action rerun
+                armExtension.setPower(0);
+                return false;
+            }
         }
     }
 

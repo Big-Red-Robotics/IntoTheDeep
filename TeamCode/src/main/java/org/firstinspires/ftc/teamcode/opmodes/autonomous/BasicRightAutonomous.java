@@ -13,28 +13,27 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.components.Arm;
 import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
+import org.firstinspires.ftc.teamcode.utility.teaminfo.InitialSide;
 import org.firstinspires.ftc.teamcode.utility.teaminfo.TeamColor;
 
-@Disabled
-@Autonomous(name="Basic Autonomous - LEFT")
+@Autonomous(name="Basic Autonomous - RIGHT")
 public class BasicRightAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
         //initialize components
         Arm arm = new Arm(hardwareMap);
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        arm.setArmExtensionPosition(0);
 
         telemetry.addLine("waiting to start!");
         telemetry.update();
 
         while (!isStarted() && !isStopRequested()) {
+            RobotConfig.initialSide = InitialSide.RIGHT;
             if(gamepad1.b || gamepad2.b) RobotConfig.teamColor = TeamColor.RED;
             if(gamepad1.x || gamepad2.x) RobotConfig.teamColor = TeamColor.BLUE;
 
-            arm.setArmExtensionPosition(0);
-
             if(gamepad1.right_bumper) arm.resetArmExtension();
-
 
             telemetry.addData("Team color", RobotConfig.teamColor);
             telemetry.addData("Initial side", RobotConfig.initialSide);
@@ -43,21 +42,30 @@ public class BasicRightAutonomous extends LinearOpMode {
             sleep(100);
         }
 
-        //TODO: set the write coordinates for initial point
-        //also could do this when instantiating MecanumDrive, but...
-        boolean isRed = RobotConfig.teamColor == TeamColor.RED;
+        //set the initial pose of drive
+//        boolean isRed = RobotConfig.teamColor == TeamColor.RED;
         Pose2d initialPose;
-        if (isRed) initialPose = new Pose2d(60, -24, Math.toRadians(-90));
-        else initialPose = new Pose2d(-60, 24, Math.toRadians(90));
-
+//        //SOMEHOW X AND Y ARE FLIPPED
+//        if (isRed) initialPose = new Pose2d(-24, 60, Math.toRadians(-90));
+//        else initialPose = new Pose2d(24, -60, Math.toRadians(90));
+        initialPose = new Pose2d(0, 0, 0);
         drive.pose = initialPose;
 
+        //go to place
         Action tab1 = drive.actionBuilder(initialPose)
-                .strafeToConstantHeading(isRed ? new Vector2d(55, 60) : new Vector2d(-55, -60))
+//                .strafeToConstantHeading(isRed ? new Vector2d(55, -60) : new Vector2d(-55, 60))
+                .strafeToConstantHeading(new Vector2d(5, -40))
                 .build();
 
         waitForStart();
 
-        Actions.runBlocking(tab1);
+        //untangle the robot
+        Actions.runBlocking(new SequentialAction(arm.armExToPosition(200))); //extend armEx
+        arm.stopWrist(); //flip claw
+
+        Actions.runBlocking(new SequentialAction(
+                tab1,
+                arm.armExToPosition(0)
+        ));
     }
 }
