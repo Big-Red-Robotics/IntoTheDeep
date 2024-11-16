@@ -42,8 +42,8 @@ public class Arm {
 
         arm.setTargetPosition(0);
 
-        resetArm();
-        resetArmExtension();
+//        resetArm();
+//        resetArmExtension();
     }
 
     //wrist

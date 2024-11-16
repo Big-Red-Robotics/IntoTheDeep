@@ -29,7 +29,8 @@ public class BasicLeftAutonomous extends LinearOpMode {
 //            if(gamepad1.b || gamepad2.b) RobotConfig.teamColor = TeamColor.RED;
 //            if(gamepad1.x || gamepad2.x) RobotConfig.teamColor = TeamColor.BLUE;
 
-            if(gamepad1.right_bumper) arm.resetArmExtension();
+            if(gamepad1.right_bumper || gamepad2.right_bumper) arm.resetArmExtension();
+            if(gamepad1.left_bumper || gamepad2.left_bumper) arm.resetArm();
 
 //            telemetry.addData("Team color", RobotConfig.teamColor);
             telemetry.addData("Initial side", RobotConfig.initialSide);
