@@ -117,8 +117,8 @@ public class Arm {
         return new ArmExToPosition(pos);
     }
 
-    public Action liftToPosition(int pos) {
-        return new LiftToPosition(pos);
+    public Action armToPosition(int pos) {
+        return new ArmToPosition(pos);
     }
 
     public Action outtakeAction() {
@@ -186,11 +186,11 @@ public class Arm {
         }
     }
 
-    public class LiftToPosition implements Action {
+    public class ArmToPosition implements Action {
         private boolean initialized = false;
         private final int targetPosition;
 
-        public LiftToPosition(int pos){
+        public ArmToPosition(int pos){
             this.targetPosition = pos;
         }
 
@@ -199,15 +199,18 @@ public class Arm {
             // powers on motor, if it is not on
             if (!initialized) {
                 setArmPosition(targetPosition);
+                Log.d("SET LIFT POS", String.valueOf(getArmTargetPosition()));
                 arm.setPower(1.0);
                 initialized = true;
             }
 
             // checks lift's current position
-            packet.put("current Arm position", getArmPosition());
-            packet.put("target Arm position", getArmTargetPosition());
+            packet.put("current Lift position", getArmPosition());
+            packet.put("target Lift position", getArmTargetPosition());
             if (arm.isBusy()) {
                 // true causes the action to rerun
+                Log.d("target Lift position", String.valueOf(getArmTargetPosition()));
+                Log.d("current Lift position", String.valueOf(getArmPosition()));
                 return true;
             } else {
                 // false stops action rerun

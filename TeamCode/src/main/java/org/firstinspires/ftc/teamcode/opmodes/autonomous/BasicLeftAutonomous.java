@@ -3,21 +3,17 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.components.Arm;
 import org.firstinspires.ftc.teamcode.components.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 import org.firstinspires.ftc.teamcode.utility.teaminfo.InitialSide;
-import org.firstinspires.ftc.teamcode.utility.teaminfo.TeamColor;
 
-@Autonomous(name="Basic Autonomous - RIGHT")
-public class BasicRightAutonomous extends LinearOpMode {
+@Autonomous(name="Basic Autonomous - LEFT")
+public class BasicLeftAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
         //initialize components
@@ -54,7 +50,8 @@ public class BasicRightAutonomous extends LinearOpMode {
         //go to place
         Action tab1 = drive.actionBuilder(initialPose)
 //                .strafeToConstantHeading(isRed ? new Vector2d(55, -60) : new Vector2d(-55, 60))
-                .strafeToConstantHeading(new Vector2d(5, -40))
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(60, -12, Math.toRadians(90)), - Math.PI / 2)
                 .build();
 
         waitForStart();
@@ -69,7 +66,7 @@ public class BasicRightAutonomous extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(
                 tab1,
                 arm.armExToPosition(0),
-                arm.armToPosition(0)
+                arm.armToPosition(5000)
         ));
     }
 }
