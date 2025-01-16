@@ -54,7 +54,7 @@ public class BasicTeleOp extends LinearOpMode {
             //lift
             if (gamepad2.a) {
                 //ground default
-                arm.setArmPosition(Arm.GROUND);
+                arm.setArmPosition(Arm.GROUND+300);
                 arm.setArmExtensionPosition(0);
             } else if (gamepad2.x) {
                 //low basket
@@ -66,7 +66,7 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.setArmExtensionPosition(Arm.EXTEND);
             } else if (gamepad2.b) {
                 //intake
-                arm.setArmPosition(Arm.VERY_LOW);
+                arm.setArmPosition(1300);
                 arm.setArmExtensionPosition(700);
             }
 
@@ -86,7 +86,7 @@ public class BasicTeleOp extends LinearOpMode {
             if (gamepad2.dpad_down) arm.setArmPosition(200);
             if (gamepad2.dpad_down) arm.setArmPosition(Arm.VERY_LOW);
             else if (gamepad2.dpad_left) arm.setArmExtensionPosition(500);
-            else if (gamepad2.dpad_up) arm.setArmPosition(Arm.GROUND);
+            else if (gamepad2.dpad_up) arm.setArmPosition(925);
             else if (gamepad2.dpad_right) arm.setArmExtensionPosition(1550);
 
 
@@ -103,12 +103,11 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.stopDs();
 
 
+  ;
             if(gamepad1.a)
-                arm.claw.setPosition(0.2);
+                arm.claw.setPosition(0.05);
             else if (gamepad1.b)
-                arm.claw.setPosition(0.6);
-
-
+                arm.claw.setPosition(0.5);
             arm.update();
 
             //telemetry
@@ -117,6 +116,9 @@ public class BasicTeleOp extends LinearOpMode {
             telemetry.addData("arm position", arm.getArmPosition());
             telemetry.addData("arm target", arm.getArmTargetPosition());
             telemetry.addLine();
+            telemetry.addData("claw",arm.claw.getPosition());
+            telemetry.addData("claw pwl",arm.claw.getPwmRange());
+            telemetry.addData("claw pos",arm.claw.getController().getServoPosition(arm.claw.getPortNumber()));
 //            telemetry.addData("wrist",arm.getWristPosition());
             telemetry.addLine();
             telemetry.addData("ArmEx power", arm.getArmExPower());

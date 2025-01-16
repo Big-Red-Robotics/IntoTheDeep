@@ -10,7 +10,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
@@ -19,7 +21,9 @@ public class Arm {
     private final CRServo wrist;
     private final CRServo intake;
 
-    public final Servo claw;
+    public final ServoImplEx claw;
+
+
 
     private final CRServo leftDServo;
 
@@ -31,7 +35,7 @@ public class Arm {
     public static final int LOW = 3000;
     public static final int HIGH = 4051;
     public static final int GROUND = 0;
-    public static final double dspeed = 0.2;
+    public static final double dspeed = 0.5;
 
     public boolean hang = false;
 
@@ -40,12 +44,13 @@ public class Arm {
     public Arm(HardwareMap hardwareMap){
 //        this.slideZeroReset = hardwareMap.get(TouchSensor.class,"touch");
         this.arm = hardwareMap.get(DcMotorEx.class, RobotConfig.arm);
-        this.claw = hardwareMap.get(Servo.class, RobotConfig.claw);
+        this.claw = hardwareMap.get(ServoImplEx.class, RobotConfig.claw);
         this.wrist = hardwareMap.get(CRServo.class, RobotConfig.wrist);
         this.armExtension = hardwareMap.get(DcMotor.class, RobotConfig.armExtension);
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
         this.rightDServo = hardwareMap.get(CRServo.class, RobotConfig.RDServo);
         this.leftDServo = hardwareMap.get(CRServo.class, RobotConfig.LDServo);
+        this.claw.setPwmRange(new PwmControl.PwmRange(600,2400));
 
         armExtension.setDirection(DcMotor.Direction.FORWARD);
 //        arm.setDirection(DcMotorSimple.Direction.REVERSE);
