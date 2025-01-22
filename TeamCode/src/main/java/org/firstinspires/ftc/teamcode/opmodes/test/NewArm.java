@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-@Disabled
 @TeleOp
 public class NewArm extends LinearOpMode {
 
@@ -14,8 +14,8 @@ public class NewArm extends LinearOpMode {
         //initialize components
         CRServo leftArm = hardwareMap.get(CRServo.class, "lA");
         CRServo rightArm = hardwareMap.get(CRServo.class, "rA");
-        CRServo leftWrist = hardwareMap.get(CRServo.class, "lW");
-        CRServo rightWrist = hardwareMap.get(CRServo.class, "rW");;
+        CRServo leftDServo = hardwareMap.get(CRServo.class, "lD");
+        CRServo rightDServo = hardwareMap.get(CRServo.class, "rD");
         ServoImplEx claw = hardwareMap.get(ServoImplEx.class, "claw");
 
         double speed = 0.5;
@@ -45,17 +45,17 @@ public class NewArm extends LinearOpMode {
             }
 
             if (gamepad1.dpad_right){
-                rightDServo.setPower(dspeed);
-                leftDServo.setPower(-dspeed);
+                rightDServo.setPower(speed);
+                leftDServo.setPower(-speed);
             } else if (gamepad1.dpad_left) {
-                rightDServo.setPower(-dspeed);
-                leftDServo.setPower(dspeed);
+                rightDServo.setPower(-speed);
+                leftDServo.setPower(speed);
             } else if (gamepad1.dpad_up) {
-                rightDServo.setPower(dspeed);
-                leftDServo.setPower(dspeed);
+                rightDServo.setPower(speed);
+                leftDServo.setPower(speed);
             } else if (gamepad1.dpad_down) {
-                rightDServo.setPower(-dspeed);
-                leftDServo.setPower(-dspeed);
+                rightDServo.setPower(-speed);
+                leftDServo.setPower(-speed);
             } else {
                 rightDServo.setPower(0);
                 leftDServo.setPower(0);
