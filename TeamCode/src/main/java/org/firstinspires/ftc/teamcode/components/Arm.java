@@ -10,19 +10,32 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
+
 import org.firstinspires.ftc.teamcode.utility.RobotConfig;
 
 public class Arm {
     public final DcMotorEx arm;
     private final CRServo wrist;
     private final CRServo intake;
+
+    public final ServoImplEx claw;
+
+
+
+    private final CRServo leftDServo;
+
+    private final CRServo rightDServo;
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;
 
     public static final int VERY_LOW = 1600;
     public static final int LOW = 3000;
-    public static final int HIGH = 4000;
+    public static final int HIGH = 4051;
     public static final int GROUND = 0;
+    public static final double dspeed = 0.5;
 
     public boolean hang = false;
 
@@ -31,9 +44,13 @@ public class Arm {
     public Arm(HardwareMap hardwareMap){
 //        this.slideZeroReset = hardwareMap.get(TouchSensor.class,"touch");
         this.arm = hardwareMap.get(DcMotorEx.class, RobotConfig.arm);
+        this.claw = hardwareMap.get(ServoImplEx.class, RobotConfig.claw);
         this.wrist = hardwareMap.get(CRServo.class, RobotConfig.wrist);
         this.armExtension = hardwareMap.get(DcMotor.class, RobotConfig.armExtension);
         this.intake = hardwareMap.get(CRServo.class, RobotConfig.intake);
+        this.rightDServo = hardwareMap.get(CRServo.class, RobotConfig.RDServo);
+        this.leftDServo = hardwareMap.get(CRServo.class, RobotConfig.LDServo);
+        this.claw.setPwmRange(new PwmControl.PwmRange(600,2400));
 
         armExtension.setDirection(DcMotor.Direction.FORWARD);
 //        arm.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -44,24 +61,55 @@ public class Arm {
 
         arm.setTargetPosition(0);
 
-//        resetArm();
-//        resetArmExtension();
+        wrist.setPower(0);
+
+        resetArm();
+        resetArmExtension();
     }
 
-    //wrist
+
+    public void dUp(){
+        rightDServo.setPower(dspeed);
+        leftDServo.setPower(-dspeed);
+    }
+
+    public void dDown(){
+        rightDServo.setPower(-dspeed);
+        leftDServo.setPower(dspeed);
+    }
+
+    public void dLeft(){
+        rightDServo.setPower(dspeed);
+        leftDServo.setPower(dspeed);
+    }
+
+    public void dRight(){
+        rightDServo.setPower(-dspeed);
+        leftDServo.setPower(-dspeed);
+    }
+    // wrist
     public void swingWristRight(){
         wrist.setPower(0.5);
+    }
+
+    public void stopDs(){
+        rightDServo.setPower(0);
+        leftDServo.setPower(0);
     }
 
     public void swingWristLeft(){
         wrist.setPower(-0.5);
     }
 
+    public double getWristPower(){
+        return wrist.getPower();
+    }
+
     public void stopWrist(){
         wrist.setPower(0);
     }
 
-    //wrist as Servo (not CRServo)
+    //  wrist as Servo (not CRServo)
 //    public void setWristPosition(int pos){
 //        wrist.setPosition(pos);
 //    }
@@ -106,10 +154,17 @@ public class Arm {
         armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void update() {
+    public void  update() {
         //armExtension
-        if (armExtension.isBusy()) armExtension.setPower(0.7);
-        else armExtension.setPower(0.0);
+        if (armExtension.getTargetPosition() == 0){
+            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(armExtension.isBusy()) armExtension.setPower(1);
+            else armExtension.setPower(0.0);
+        } else if(armExtension.isBusy()) {
+            armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if(armExtension.getTargetPosition() == EXTEND) armExtension.setPower(1.0);
+            else armExtension.setPower(1);
+        } else armExtension.setPower(0.0);
 
         //arm (lift)
         if (arm.isBusy()) arm.setPower(1.0);
@@ -138,7 +193,7 @@ public class Arm {
     public int getArmTargetPosition() {return arm.getTargetPosition();}
     public int getArmPower() {return (int) arm.getPower();}
 
-//    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
+    //    public double getWristPosition() {return wrist.getPosition();} //wrist as Servo (not CRServo)
     public double getArmExPower() {return armExtension.getPower();}
     public int getArmExPosition() {return armExtension.getCurrentPosition();}
     public int getArmExTargetPosition() {return armExtension.getTargetPosition();}
@@ -152,7 +207,7 @@ public class Arm {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intake.setPower(power);
+            //  intake.setPower(power);
             return false;
         }
     }

@@ -12,10 +12,16 @@ public class RobotConfig {
 
     public static String motorFL = "dFL", motorFR = "dFR", motorBL = "dBL", motorBR = "dBR";
     public static String arm = "arm";
-    public static String wrist = "wrist", intake = "intake";
+
+    public static String claw = "claw";
+    public static String wrist = "ldservo", intake = "rdservo";
     public static String armExtension = "armEx";
     public static String launchDrone = "droneLauncher";
     public static String positionDrone = "dronePositioner";
+
+    public static String LDServo = "ldservo";
+
+    public static String RDServo = "rdservo";
 
     //unused
     public static String imu = "imu";
