@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @TeleOp
@@ -17,6 +18,9 @@ public class NewArm extends LinearOpMode {
         CRServo leftDServo = hardwareMap.get(CRServo.class, "lD");
         CRServo rightDServo = hardwareMap.get(CRServo.class, "rD");
         ServoImplEx claw = hardwareMap.get(ServoImplEx.class, "claw");
+
+        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftDServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         double speed = 0.5;
 
