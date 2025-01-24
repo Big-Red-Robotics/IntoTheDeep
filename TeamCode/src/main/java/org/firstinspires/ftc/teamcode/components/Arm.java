@@ -20,13 +20,8 @@ public class Arm {
     public final DcMotorEx arm;
     private final CRServo wrist;
     private final CRServo intake;
-
     public final ServoImplEx claw;
-
-
-
     private final CRServo leftDServo;
-
     private final CRServo rightDServo;
     private final DcMotor armExtension;
 //    public final TouchSensor slideZeroReset;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -50,16 +51,16 @@ public class BasicLeftAutonomous extends LinearOpMode {
 
         //go to place
         Action tab1 = drive.actionBuilder(initialPose)
-//                .strafeToConstantHeading(isRed ? new Vector2d(55, -60) : new Vector2d(-55, 60))
                 .setTangent(0)
-                .splineToLinearHeading(new Pose2d(60, -12, Math.toRadians(90)), - Math.PI / 2)
+                .strafeToLinearHeading(new Vector2d(50, 20), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(55, 0), Math.toRadians(90))
                 .build();
 
         waitForStart();
 
         //untangle the robot
         Actions.runBlocking(new SequentialAction(new SequentialAction(
-                arm.armExToPosition(300),
+//                arm.armExToPosition(300),
                 arm.armToPosition(500)
         ))); //extend armEx
         arm.stopWrist(); //flip claw
