@@ -74,9 +74,10 @@ public class BasicLeftAutonomous extends LinearOpMode {
                 .forward(12) 
                 .build();
         //arm close
-        Actions.runBlocking(new SequentialAction(new SequentialAction(
+        Actions.runBlocking(new SequentialAction(
+                driveForward,
                 arm.armToPosition(500)
-        )));
+        ));
         
         // Actions.runBlocking(new SequentialAction(new SequentialAction(
         //         arm.armExToPosition(
