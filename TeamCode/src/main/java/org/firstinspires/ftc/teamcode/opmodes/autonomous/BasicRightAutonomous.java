@@ -64,7 +64,6 @@ public class BasicRightAutonomous extends LinearOpMode {
 
         //untangle the robot
         Actions.runBlocking(new SequentialAction(new SequentialAction(
-                arm.armExToPosition(300),
                 arm.armToPosition(500)
         ))); //extend armEx
         arm.stopWrist(); //flip claw

@@ -22,6 +22,7 @@ public class BasicTeleOp extends LinearOpMode {
         telemetry.addLine("waiting to start!");
         telemetry.addLine("test!");
         telemetry.update();
+        arm.setArmPosition(0);
         waitForStart();
 
         while (opModeIsActive()) {
