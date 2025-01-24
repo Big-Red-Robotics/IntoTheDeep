@@ -54,8 +54,8 @@ public class BasicTeleOp extends LinearOpMode {
             //lift
             if (gamepad2.a) {
                 //ground default
-                arm.setArmPosition(Arm.GROUND+300);
-                arm.setArmExtensionPosition(0);
+//                arm.setArmPosition(Arm.GROUND+300);
+//                arm.setArmExtensionPosition(0);
             } else if (gamepad2.x) {
                 //low basket
                 arm.setArmPosition(Arm.LOW);
@@ -66,7 +66,7 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.setArmExtensionPosition(Arm.EXTEND);
             } else if (gamepad2.b) {
                 //intake
-                arm.setArmPosition(1300);
+                arm.setArmPosition(1100);
                 arm.setArmExtensionPosition(700);
             }
 
@@ -107,7 +107,7 @@ public class BasicTeleOp extends LinearOpMode {
             if(gamepad1.a)
                 arm.claw.setPosition(0.05);
             else if (gamepad1.b)
-                arm.claw.setPosition(0.5);
+                arm.claw.setPosition(0.45);
             arm.update();
 
             //telemetry
