@@ -54,8 +54,8 @@ public class BasicTeleOp extends LinearOpMode {
             //lift
             if (gamepad2.a) {
                 //ground default
-                arm.setArmPosition(Arm.GROUND);
-                arm.setArmExtensionPosition(0);
+//                arm.setArmPosition(Arm.GROUND+300);
+//                arm.setArmExtensionPosition(0);
             } else if (gamepad2.x) {
                 //low basket
                 arm.setArmPosition(Arm.LOW);
@@ -66,33 +66,59 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.setArmExtensionPosition(Arm.EXTEND);
             } else if (gamepad2.b) {
                 //intake
-                arm.setArmPosition(Arm.VERY_LOW);
+                arm.setArmPosition(1100);
                 arm.setArmExtensionPosition(700);
             }
 
             if(gamepad1.y) {
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(5000);
                 arm.hang = true;
             } else if(gamepad1.x){
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(5500);
                 arm.hang = true;
             } else if(gamepad1.b && arm.hang){
+                arm.setArmExtensionPosition(0);
                 arm.setArmPosition(-500);
             }
 
             if (gamepad2.dpad_down) arm.setArmPosition(200);
             if (gamepad2.dpad_down) arm.setArmPosition(Arm.VERY_LOW);
             else if (gamepad2.dpad_left) arm.setArmExtensionPosition(500);
-            else if (gamepad2.dpad_up) arm.setArmPosition(Arm.GROUND);
+            else if (gamepad2.dpad_up) arm.setArmPosition(925);
             else if (gamepad2.dpad_right) arm.setArmExtensionPosition(1550);
 
+
+
+            if(gamepad1.dpad_up)
+                arm.dUp();
+            else if(gamepad1.dpad_down)
+                arm.dDown();
+            else if(gamepad1.dpad_right)
+                arm.dRight();
+            else if (gamepad1.dpad_left)
+                arm.dLeft();
+            else
+                arm.stopDs();
+
+
+            ;
+            if(gamepad1.a)
+                arm.claw.setPosition(0.05);
+            else if (gamepad1.b)
+                arm.claw.setPosition(0.45);
             arm.update();
 
             //telemetry
             telemetry.addData("arm power", arm.getArmPower());
+            telemetry.addData("wrist power",arm.getWristPower());
             telemetry.addData("arm position", arm.getArmPosition());
             telemetry.addData("arm target", arm.getArmTargetPosition());
             telemetry.addLine();
+            telemetry.addData("claw",arm.claw.getPosition());
+            telemetry.addData("claw pwl",arm.claw.getPwmRange());
+            telemetry.addData("claw pos",arm.claw.getController().getServoPosition(arm.claw.getPortNumber()));
 //            telemetry.addData("wrist",arm.getWristPosition());
             telemetry.addLine();
             telemetry.addData("ArmEx power", arm.getArmExPower());
