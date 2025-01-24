@@ -24,6 +24,8 @@ public class BasicRightAutonomous extends LinearOpMode {
         Arm arm = new Arm(hardwareMap);
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         arm.setArmExtensionPosition(0);
+        arm.resetArm();
+        arm.resetArmExtension();
 
         telemetry.addLine("waiting to start!");
         telemetry.update();
