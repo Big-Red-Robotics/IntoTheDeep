@@ -72,5 +72,13 @@ public class BasicRightAutonomous extends LinearOpMode {
                 arm.armExToPosition(0),
                 arm.armToPosition(0)
         ));
+         //drive forward
+        Action driveForward = drive.actionBuilder(drive.pose)
+                .forward(1) 
+                .build();
+        //arm close
+        Actions.runBlocking(new SequentialAction(new SequentialAction(
+                arm.armToPosition(500)
+        )));
     }
 }
