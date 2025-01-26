@@ -113,19 +113,19 @@ public class Arm {
 
     //arm
     public void resetArm(){
+        arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setTargetPosition(0);
         arm.setPower(0);
     }
 
     public void resetArmExtension(){
         armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        armExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armExtension.setTargetPosition(0);
         armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armExtension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armExtension.setTargetPosition(0);
         armExtension.setPower(0);
     }
 

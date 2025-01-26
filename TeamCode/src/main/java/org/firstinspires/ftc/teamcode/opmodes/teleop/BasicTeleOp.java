@@ -23,6 +23,7 @@ public class BasicTeleOp extends LinearOpMode {
         telemetry.addLine("test!");
         telemetry.update();
         arm.setArmPosition(0);
+        arm.setArmExtensionPosition(0);
         waitForStart();
 
         while (opModeIsActive()) {
@@ -81,7 +82,7 @@ public class BasicTeleOp extends LinearOpMode {
                 arm.hang = true;
             } else if(gamepad1.b && arm.hang){
                 arm.setArmExtensionPosition(0);
-                arm.setArmPosition(-500);
+                arm.setArmPosition(-1000);
             }
 
             if (gamepad2.dpad_down) arm.setArmPosition(200);
